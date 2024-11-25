@@ -3,14 +3,22 @@ import React from "react";
 
 interface props {
   functionAction: () => void;
-  text: string;
+  label: string;
+  reset?: () => void;
 }
 
-export default function CounterButton({ functionAction, text }: props) {
+export default function CounterButton({ functionAction, label, reset }: props) {
   return (
     <>
-      <Pressable style={styles.buttonCounterStyle} onPress={functionAction}>
-        <Text style={styles.textButton}>{text}</Text>
+      <Pressable
+        style={({ pressed }) => [
+          styles.buttonCounterStyle,
+          pressed && styles.pressedStyle,
+        ]}
+        onLongPress={reset ? reset : () => ""}
+        onPress={functionAction}
+      >
+        <Text style={styles.textButton}>{label}</Text>
       </Pressable>
     </>
   );
@@ -34,5 +42,9 @@ const styles = StyleSheet.create({
     paddingLeft: 60,
     fontSize: 20,
     fontWeight: "bold",
+  },
+
+  pressedStyle: {
+    opacity: 0.7,
   },
 });

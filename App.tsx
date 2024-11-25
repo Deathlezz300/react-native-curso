@@ -20,8 +20,16 @@ export default function App() {
     <View style={styles.container}>
       <Text style={styles.textCounter}>{counter}</Text>
       <View style={styles.buttonsContainer}>
-        <CounterButton functionAction={decrement} text="-1" />
-        <CounterButton functionAction={increment} text="+1" />
+        <CounterButton
+          functionAction={decrement}
+          label="-1"
+          reset={() => setCounter(0)}
+        />
+        <CounterButton
+          functionAction={increment}
+          label="+1"
+          reset={() => setCounter(0)}
+        />
       </View>
       <StatusBar style="auto" />
     </View>
