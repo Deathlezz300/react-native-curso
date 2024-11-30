@@ -3,14 +3,15 @@ import React from "react";
 import { globalStyles } from "@/styles/global-styles";
 import { ButtonVariants } from "@/interface";
 import { Colors } from "@/constants/Colors";
+import * as Haptics from 'expo-haptics';
 
 interface props extends PressableProps {
   variant: ButtonVariants;
   label: string;
-  onPress:()=>void;
+  onPressAction:()=>void;
 }
 
-const CalculatorButton = ({ variant, label, ...rest }: props) => {
+const CalculatorButton = ({ variant, label , onPressAction , ...rest }: props) => {
   return (
     <Pressable
       style={ ({ pressed }) => [
@@ -20,6 +21,10 @@ const CalculatorButton = ({ variant, label, ...rest }: props) => {
         label === "0" && { flex: 2 },
         pressed && { opacity: 0.7 },
       ]}
+      onPress={()=>{
+        Haptics.selectionAsync()
+        onPressAction();
+      }}
       {...rest}
     >
       <Text

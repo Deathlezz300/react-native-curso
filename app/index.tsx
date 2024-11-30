@@ -1,16 +1,80 @@
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Platform } from "react-native";
 import React from "react";
 import { globalStyles } from "@/styles/global-styles";
 import ThemeText from "@/components/ThemeText";
 import CalculatorButton from "@/components/CalculatorButton";
 import ButtonsData from "@/constants/ButtonsData";
+import * as NavigationBar from "expo-navigation-bar";
+import { useCalculator } from "@/hooks/useCalculator";
+import { CalculatorButtonI } from "@/interface";
 
 const CalculatorApp = () => {
+  const isAndroid = Platform.OS === "android";
+
+  isAndroid && NavigationBar.setBackgroundColorAsync("black");
+
+  const {
+    equation,
+    number,
+    previusNumber,
+    buildNumber,
+    toogleSign,
+    handleClear,
+    handleDelNumber,
+    divideOperation,
+    addOperation,
+    multiPlayOperation,
+    subtractOperation,
+    handleButtonCalculateResult,
+  } = useCalculator();
+
+  const handleActionButton = (button: CalculatorButtonI) => {
+    if (button.variant === "number") {
+      buildNumber(button.label);
+    }
+
+    if (button.variant === "action") {
+      switch (button.label) {
+        case "C":
+          handleClear();
+          break;
+        case "del":
+          handleDelNumber();
+          break;
+        case "+/-":
+          toogleSign();
+          break;
+      }
+    }
+
+    if (button.variant === "operator") {
+      switch (button.label) {
+        case "/":
+          divideOperation();
+          break;
+        case "x":
+          multiPlayOperation();
+          break;
+        case "+":
+          addOperation();
+          break;
+        case "-":
+          subtractOperation();
+          break;
+        case "=":
+          handleButtonCalculateResult();
+          break;
+      }
+    }
+  };
+
   return (
     <View style={globalStyles.calculatorContainer}>
       <View style={styles.resultContainer}>
-        <ThemeText variant="primary">50 + 70</ThemeText>
-        <ThemeText variant="secondary">20</ThemeText>
+        <ThemeText variant="primary">{equation}</ThemeText>
+        <ThemeText variant="secondary">
+          {previusNumber === equation ? "" : previusNumber}
+        </ThemeText>
       </View>
       <View style={styles.buttonsContainer}>
         {ButtonsData.map((button) => (
@@ -18,7 +82,7 @@ const CalculatorApp = () => {
             key={button.label}
             label={button.label}
             variant={button.variant}
-            onPress={() => {}}
+            onPressAction={() => handleActionButton(button)}
           />
         ))}
       </View>
