@@ -72,6 +72,9 @@ export const useCalculator = () => {
   };
 
   const setLastNumber = () => {
+
+    handleButtonCalculateResult()
+
     if (number.endsWith(".")) {
       setPreviusNumber(number.slice(0, -1));
     }
@@ -132,7 +135,7 @@ export const useCalculator = () => {
     const result=calculateResult();
 
     setPreviusNumber('');
-    setNumber(result);
+    setEquation(result);
 
     lastOperation.current=undefined;
 
