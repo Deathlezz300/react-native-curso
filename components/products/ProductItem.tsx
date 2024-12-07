@@ -23,7 +23,7 @@ const ProductItem = ({
         {showDetails && (
           <Link
             className="font-works-medium font-extrabold text-primary"
-            href={`/drawer/tabs/products/${id}`}
+            href={`/products/${id}`}
           >
             Ver detalles
           </Link>

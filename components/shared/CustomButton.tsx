@@ -3,7 +3,7 @@ import { forwardRef, Ref } from "react";
 import { colorTypes } from "@/interface";
 
 interface props extends PressableProps {
-  color: colorTypes;
+  color?: colorTypes;
   children: string;
 }
 

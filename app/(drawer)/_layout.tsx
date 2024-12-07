@@ -25,20 +25,21 @@ const DrawerLayout = () => {
         }}
       />
       <Drawer.Screen
-        name="tabs"
+        name="(tabs)"
         options={{
           title: "Tabs",
-          drawerIcon: () => (
-            <Ionicons name="albums-outline" size={24} color="purple" />
+          drawerIcon: ( { color , size } ) => (
+            <Ionicons name="albums-outline" size={size} color={color} />
           ),
+          headerShown: false,
         }}
       />
       <Drawer.Screen
         name="schedule/index"
         options={{
           title: "Schedule",
-          drawerIcon: () => (
-            <Ionicons name="calendar" size={24} color="purple" />
+          drawerIcon: ( { color , size } ) => (
+            <Ionicons name="calendar" size={size} color={color} />
           ),
         }}
       />
