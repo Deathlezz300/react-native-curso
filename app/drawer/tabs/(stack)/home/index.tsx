@@ -8,13 +8,13 @@ const HomeScreen = () => {
   return (
     <SafeAreaView className="flex-1 mt-4 mx-6">
       <View className="w-full flex flex-col items-center gap-2">
-        <Link href="/products" asChild>
+        <Link href="/drawer/tabs/products" asChild>
           <CustomButton color="primary">Products</CustomButton>
         </Link>
-        <Link href="/profile" asChild>
+        <Link href="/drawer/tabs/profile" asChild>
           <CustomButton color="secondary">Profile</CustomButton>
         </Link>
-        <Link href="/settings" asChild>
+        <Link href="/drawer/tabs/settings" asChild>
           <CustomButton color="tertiary">Ajustes</CustomButton>
         </Link>
       </View>

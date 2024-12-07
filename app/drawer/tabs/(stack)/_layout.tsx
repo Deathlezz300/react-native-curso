@@ -6,10 +6,10 @@ const StackLayout = () => {
   return (
     <Stack
       screenOptions={{
-        headerShown: true,
+        headerShown: false,
         animation: "fade",
         contentStyle: {
-          backgroundColor: "transparent",
+          backgroundColor: "white",
         },
         headerShadowVisible: false,
       }}
