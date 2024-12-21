@@ -19,6 +19,14 @@ const RootLayout = () => {
               title: "Movies",
             }}
           />
+
+            <Stack.Screen
+              name="(Movies)/(Details)/[id]"
+              options={{
+                title: "Details",
+              }}
+            />
+
         </Stack>
       </ExternalProviders>
     </GestureHandlerRootView>

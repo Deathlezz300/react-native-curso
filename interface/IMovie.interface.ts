@@ -7,3 +7,11 @@ export interface IMovie{
     rating:number;
     backdrop:string;
 }
+
+export interface CompleteMovie extends IMovie{
+    generes:string[];
+    duration:number;
+    budget:number;
+    originalTitle:string;
+    productionCompanies:string[];
+}
