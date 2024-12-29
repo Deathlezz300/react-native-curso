@@ -1,32 +1,60 @@
-import { View } from "react-native";
-import React, { useEffect } from "react";
-import { Slot, SplashScreen } from "expo-router";
-import "../styles/global.css";
+import { useEffect } from "react";
+import {
+  DarkTheme,
+  DefaultTheme,
+  ThemeProvider,
+} from "@react-navigation/native";
 import { useFonts } from "expo-font";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { router, Stack } from "expo-router";
+import * as SplashScreen from "expo-splash-screen";
 
+import { useColorScheme } from "@/hooks/useColorScheme";
+import { useThemeColor } from "@/hooks/useThemeColor";
+import { allRoutes } from "@/constants/Routes";
+import "../styles/global.css";
+
+// Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
-const RootLayout = () => {
-  const [fontsLoaded, error] = useFonts({
-    "WorkSans-Black": require("../assets/fonts/WorkSans-Black.ttf"),
-    "WorkSans-Light": require("../assets/fonts/WorkSans-Light.ttf"),
-    "WorkSans-Medium": require("../assets/fonts/WorkSans-Medium.ttf"),
+export default function RootLayout() {
+  const colorScheme = useColorScheme();
+  const backgroundColor = useThemeColor({}, "background");
+
+  const [loaded] = useFonts({
+    SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
   });
 
   useEffect(() => {
-    if (error) throw error;
+    if (loaded) {
+      SplashScreen.hideAsync();
+    }
+  }, [loaded]);
 
-    if (fontsLoaded) SplashScreen.hideAsync();
-  }, [fontsLoaded]);
-
-  if (!fontsLoaded || error) return null;
+  if (!loaded) {
+    return null;
+  }
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <Slot />
-    </GestureHandlerRootView>
-  );
-};
+    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+      <Stack
+        screenOptions={{
+          headerShadowVisible: false,
+          contentStyle: { backgroundColor },
+          headerStyle: { backgroundColor },
+        }}
+      >
+        <Stack.Screen name="index" options={{ title: "Inicio" }} />
 
-export default RootLayout;
+        {allRoutes.map((route) => (
+          <Stack.Screen
+            key={route.name}
+            name={route.name}
+            options={{
+              title: route.title,
+            }}
+          />
+        ))}
+      </Stack>
+    </ThemeProvider>
+  );
+}
