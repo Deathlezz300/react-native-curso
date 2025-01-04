@@ -36,7 +36,7 @@ const MenuItem = ({ title, icon, name, isFirst, isLast }: props) => {
     >
       <View className="flex flex-row gap-3 items-center">
         <Ionicons name={icon} size={24} color={primaryColor} />
-        <ThemedText type="normal" className="text-white">{title}</ThemedText>
+        <ThemedText type="normal">{title}</ThemedText>
       </View>
     </Pressable>
   );
