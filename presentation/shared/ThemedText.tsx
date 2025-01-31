@@ -5,7 +5,7 @@ type TextType= "normal" | "h1" | "h2" | "semi-bold" | "link";
 
 interface props extends TextProps{
     className?: string;
-    type: TextType;
+    type?: TextType;
 }
 
 const ThemedText = ({ className , children , type="normal" , ...rest }:props) => {

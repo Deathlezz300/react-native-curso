@@ -2,29 +2,39 @@ import { useEffect, useRef, useState } from "react";
 import { Animated, Easing } from "react-native";
 
 interface params {
-  startOpacity: number;
-  finalOpacity: number;
-  startPosition: number;
-  finalPosition: number;
+  startOpacity?: number;
+  finalOpacity?: number;
+  startPosition?: number;
+  finalPosition?: number;
   opacityDuration?: number;
   positionDuration?: number;
   Easing?: number;
 }
 
-export const useAnimation = (animationValues: params) => {
+const baseValues = {
+  startPosition: 0,
+  finalPosition: -100,
+  startOpacity: 0,
+  finalOpacity: 1,
+  Easing: 1,
+  opacityDuration: 300,
+  positionDuration: 300,
+};
+
+export const useAnimation = (animationValues = baseValues) => {
   const animatedOpacity = useRef(
-    new Animated.Value(animationValues.startOpacity)
+    new Animated.Value(animationValues.startOpacity ?? 0)
   ).current;
   const animatedTop = useRef(
-    new Animated.Value(animationValues.startPosition)
+    new Animated.Value(animationValues.startPosition ?? 0)
   ).current;
 
   const fadeIn = () => {
     const {
       opacityDuration = 300,
       positionDuration = 300,
-      startPosition,
-      finalOpacity,
+      startPosition = 0,
+      finalOpacity = 1,
     } = animationValues;
 
     Animated.timing(animatedOpacity, {
@@ -45,8 +55,8 @@ export const useAnimation = (animationValues: params) => {
     const {
       opacityDuration = 300,
       positionDuration = 300,
-      finalPosition,
-      startOpacity,
+      finalPosition = -100,
+      startOpacity = 0,
     } = animationValues;
     Animated.timing(animatedOpacity, {
       toValue: startOpacity,
