@@ -28,6 +28,7 @@ const ThemedSwitch = ({ isActive, onChangeValue, text }: props) => {
         thumbColor={isActive ? Colors.dark.primary : "#f4f3f4"}
         ios_backgroundColor={Colors.dark.primary}
         value={isActive}
+        onChange={()=>onChangeValue(!isActive)}
       />
     </Pressable>
   );

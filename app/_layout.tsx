@@ -8,16 +8,17 @@ import { useFonts } from "expo-font";
 import { router, Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 
-import { useColorScheme } from "@/hooks/useColorScheme";
+import { useColorScheme } from "nativewind";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { allRoutes } from "@/constants/Routes";
 import "../styles/global.css";
+import { ThemeChangerProvider } from "@/provider/ThemeChangerProvider";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
+  const { colorScheme } = useColorScheme();
   const backgroundColor = useThemeColor({}, "background");
 
   const [loaded] = useFonts({
@@ -35,7 +36,7 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+    <ThemeChangerProvider>
       <Stack
         screenOptions={{
           headerShadowVisible: false,
@@ -51,10 +52,11 @@ export default function RootLayout() {
             name={route.name}
             options={{
               title: route.title,
+              headerShown: !route.name.includes("slides"),
             }}
           />
         ))}
       </Stack>
-    </ThemeProvider>
+    </ThemeChangerProvider>
   );
 }
