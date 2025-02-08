@@ -36,6 +36,15 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "4decbf11-ea85-4bfb-907c-e03a91ba4a4b"
+      }
+    },
+    "owner": "deathlezz_300"
   }
 }
