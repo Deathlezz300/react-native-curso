@@ -5,8 +5,7 @@ import { ThemedText } from "@/components/ThemedText";
 import { usePushNotifications } from "@/hooks";
 
 const PushAppScreen = () => {
-  const { expoPushToken, notifications } = usePushNotifications();
-
+  const { expoPushToken, notifications } = usePushNotifications();  
   return (
     <SafeAreaView
       style={{

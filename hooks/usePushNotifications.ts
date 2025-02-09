@@ -3,6 +3,7 @@ import * as Notifications from "expo-notifications";
 import Constants from "expo-constants";
 import { useEffect, useRef, useState } from "react";
 import { Platform } from "react-native";
+import { RelativePathString, router } from "expo-router";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -99,6 +100,14 @@ const registerForPushNotificationsAsync = async () => {
   }
 };
 
+const handleRedirectToChat = (data: Record<string, any>) => {
+  console.log(data);
+
+  if (data?.chatId) {
+    router.push(`/chat/${data?.chatId}` as RelativePathString);
+  }
+};
+
 let areListenersReady = false;
 
 export const usePushNotifications = () => {
@@ -122,12 +131,12 @@ export const usePushNotifications = () => {
 
     notificationListener.current =
       Notifications.addNotificationReceivedListener((notification) => {
-        setNotifications((prev) => [notification, ...prev]);
+        setNotifications((prev) => [...prev, notification]);
       });
 
     responseListener.current =
       Notifications.addNotificationResponseReceivedListener((response) => {
-        console.log(response);
+        handleRedirectToChat(response.notification.request.content.data ?? {});
       });
 
     areListenersReady = true;
