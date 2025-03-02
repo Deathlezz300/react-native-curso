@@ -1,34 +1,33 @@
-import { View, Text } from "react-native";
-import React from "react";
+import CustomMap from "@/presentation/components/maps/CustomMap";
+import { useLocationStore } from "@/store/useLocationStore";
+import React, { useEffect } from "react";
+import { ActivityIndicator, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 
 const MapsScreen = () => {
+  const { lastKnownLocation, getLocation } = useLocationStore();
+
+  useEffect(() => {
+     if(!lastKnownLocation) getLocation();
+  }, []);
+
+  if (!lastKnownLocation) return <View className="flex-1 justify-center items-center">
+    <ActivityIndicator size="large" />
+  </View>;
+
   return (
     <SafeAreaView className="flex-1">
-      <MapView
-        provider={PROVIDER_GOOGLE}
-        style={{
-          width: "100%",
-          height: "100%",
-          backgroundColor: "red",
-        }}
+      <CustomMap
         initialRegion={{
-          latitude: 37.78825,
-          longitude: -122.4324,
+          latitude: lastKnownLocation?.latitude as number,
+          longitude: lastKnownLocation?.longitude as number,
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}
-      >
-        <Marker
-          coordinate={{
-            latitude: 37.78825,
-            longitude: -122.4324,
-          }}
-          title="Initial Position"
-          description="This is the initial position"
-        />
-      </MapView>
+        showsUserLocation={true}
+        showsPointsOfInterest={true}
+        showsMyLocationButton={true}
+      />
     </SafeAreaView>
   );
 };
