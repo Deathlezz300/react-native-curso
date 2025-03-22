@@ -1,3 +1,4 @@
+import { authCheckStatus, authLogin } from "@/core/auth/actions/auth-actions";
 import { User } from "@/core/interfaces";
 import { create } from "zustand";
 
@@ -19,15 +20,42 @@ export const useAuthStore = create<AuthState>()((set) => ({
   user: undefined,
 
   login: async (email, password) => {
-    //API Call
+    const response = await authLogin(email, password);
+
+    if (!response) {
+      set({ status: "unauthenticated", token: undefined, user: undefined });
+      return false;
+    }
+
+    set({
+      status: "authenticated",
+      token: response.token,
+      user: response.user,
+    });
+
     return true;
   },
 
   checkStatus: async () => {
-    //API Call
+    const response = await authCheckStatus();
+
+    if (!response) {
+      set({ status: "unauthenticated", token: undefined, user: undefined });
+      return;
+    }
+
+    set({
+      status: "authenticated",
+      token: response.token,
+      user: response.user,
+    });
   },
 
   logout: async () => {
-    //API Call
+    set({
+      status: "unauthenticated",
+      token: undefined,
+      user: undefined,
+    });
   },
 }));
