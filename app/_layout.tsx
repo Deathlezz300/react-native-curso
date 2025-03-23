@@ -1,4 +1,5 @@
 import { useColorScheme } from "@/presentation/auth/theme/hooks/useColorScheme.web";
+import { useThemeColor } from "@/presentation/auth/theme/hooks/useThemeColor";
 import {
   DarkTheme,
   DefaultTheme,
@@ -17,6 +18,9 @@ SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
+
+  const backgroundColor = useThemeColor({}, "background");
+
   const [loaded] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
     KanitRegular: require("../assets/fonts/Kanit-Regular.ttf"),
@@ -35,7 +39,7 @@ export default function RootLayout() {
   }
 
   return (
-    <GestureHandlerRootView>
+    <GestureHandlerRootView style={{ flex: 1, backgroundColor }}>
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
         <Stack
           screenOptions={{

@@ -1,13 +1,16 @@
-import { View, Text } from 'react-native'
-import React from 'react'
-import { ThemedText } from '@/presentation/auth/theme/components/ThemedText'
+import { View, Text, ScrollView } from "react-native";
+import React from "react";
+import { ThemedText } from "@/presentation/auth/theme/components/ThemedText";
+import { useThemeColor } from "@/presentation/auth/theme/hooks/useThemeColor";
 
 const HomeScreen = () => {
-  return (
-    <View>
-      <ThemedText>HomeScreen</ThemedText>
-    </View>
-  )
-}
+  const backgroundColor = useThemeColor({}, "background");
 
-export default HomeScreen
+  return (
+    <ScrollView style={{ flex: 1, backgroundColor: backgroundColor }}>
+      <ThemedText>Home Screen</ThemedText>
+    </ScrollView>
+  );
+};
+
+export default HomeScreen;
