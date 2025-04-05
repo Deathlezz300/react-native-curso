@@ -49,6 +49,12 @@ const CheckAuthenticationLayout = () => {
           title: "Productos",
         }}
       ></Stack.Screen>
+      <Stack.Screen
+        name="product/[id]"
+        options={{
+          title: "Producto",
+        }}
+      ></Stack.Screen>
     </Stack>
   );
 };
