@@ -1,7 +1,7 @@
 import { View, Text, ScrollView, ActivityIndicator } from "react-native";
 import React from "react";
-import { ThemedText } from "@/presentation/auth/theme/components/ThemedText";
-import { useThemeColor } from "@/presentation/auth/theme/hooks/useThemeColor";
+import { ThemedText } from "@/presentation/theme/components/ThemedText";
+import { useThemeColor } from "@/presentation/theme/hooks/useThemeColor";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { getProducts } from "@/core/products/actions/get-products";
 import ProductList from "@/presentation/products/components/ProductList";

@@ -4,21 +4,26 @@ import { useThemeColor } from "../hooks/useThemeColor";
 import { Ionicons } from "@expo/vector-icons";
 import { Controller, useFormContext } from "react-hook-form";
 import { ThemedText } from "./ThemedText";
+import { useColorScheme } from "../hooks/useColorScheme.web";
 
 interface props extends TextInputProps {
   icon?: keyof typeof Ionicons.glyphMap;
   name: string;
 }
 
-const ThemedTextInput = ({ icon, ...rest }: props) => {
+const ThemedTextInput = ({ icon, style, ...rest }: props) => {
   const primaryColor = useThemeColor({}, "primary");
   const textColor = useThemeColor({}, "text");
+
+  const theme = useColorScheme();
 
   const [isActive, setIsActive] = useState(false);
 
   const inputRef = useRef<TextInput>(null);
 
-  const { control } = useFormContext();
+  const { control, watch } = useFormContext();
+
+  const value = watch(rest.name);
 
   return (
     <Controller
@@ -62,14 +67,17 @@ const ThemedTextInput = ({ icon, ...rest }: props) => {
             )}
             <TextInput
               ref={inputRef}
-              placeholderTextColor="#5c5c5c"
+              placeholderTextColor={theme === "dark" ? textColor : "#5c5c5c"}
               onFocus={() => setIsActive(true)}
               onBlur={() => setIsActive(false)}
-              style={{
-                color: textColor,
-                marginRight: 10,
-                flex: 1,
-              }}
+              style={[
+                {
+                  color: textColor,
+                  marginRight: 10,
+                  flex: 1,
+                },
+                style,
+              ]}
               value={field.value}
               onChangeText={field.onChange}
               {...rest}

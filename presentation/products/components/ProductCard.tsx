@@ -1,8 +1,8 @@
-import { ThemedView } from "@/presentation/auth/theme/components/ThemedView";
-import { Product } from "../../../core/interfaces";
+import { ThemedView } from "@/presentation/theme/components/ThemedView";
+import { Product } from "@/core/interfaces";
 import { Image, TouchableOpacity } from "react-native";
 import { RelativePathString, router } from "expo-router";
-import { ThemedText } from "@/presentation/auth/theme/components/ThemedText";
+import { ThemedText } from "@/presentation/theme/components/ThemedText";
 
 interface Props {
   product: Product;

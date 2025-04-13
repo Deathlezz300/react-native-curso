@@ -1,4 +1,11 @@
-import { View, Text, PressableProps, Pressable } from "react-native";
+import {
+  View,
+  Text,
+  PressableProps,
+  Pressable,
+  TextStyle,
+  StyleProp,
+} from "react-native";
 import React from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { useThemeColor } from "../hooks/useThemeColor";
@@ -8,6 +15,7 @@ interface props extends PressableProps {
   icon?: keyof typeof Ionicons.glyphMap;
   iconPosition?: "left" | "right";
   children: React.ReactNode;
+  textStyle?: StyleProp<TextStyle>;
 }
 
 const ThemedButton = ({
@@ -15,11 +23,10 @@ const ThemedButton = ({
   icon,
   iconPosition = "right",
   style,
+  textStyle,
   ...rest
 }: props) => {
   const primaryColor = useThemeColor({}, "primary");
-
-  const textColor = useThemeColor({}, "text");
 
   return (
     <Pressable
@@ -43,15 +50,19 @@ const ThemedButton = ({
         <Ionicons
           name={icon}
           size={24}
-          color={textColor}
+          color={"white"}
           style={{ marginRight: 10, marginTop: 3 }}
         />
       )}
 
       <ThemedText
-        style={{
-          fontWeight: "bold",
-        }}
+        style={[
+          {
+            fontWeight: "bold",
+            color: "white",
+          },
+          textStyle,
+        ]}
         type="default"
       >
         {children}
@@ -61,7 +72,7 @@ const ThemedButton = ({
         <Ionicons
           name={icon}
           size={24}
-          color={textColor}
+          color={"white"}
           style={{ marginLeft: 3, marginTop: 3 }}
         />
       )}

@@ -5,18 +5,35 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
-import React, { useEffect } from "react";
-import { useNavigation } from "expo-router";
+import React, { useEffect, useMemo } from "react";
+import { useLocalSearchParams, useNavigation } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import { useThemeColor } from "@/presentation/auth/theme/hooks/useThemeColor";
+import { useThemeColor } from "@/presentation/theme/hooks/useThemeColor";
 import { FormProvider, useForm } from "react-hook-form";
-import { ThemedView } from "@/presentation/auth/theme/components/ThemedView";
-import ThemedTextInput from "@/presentation/auth/theme/components/ThemedTextInput";
+import { ThemedView } from "@/presentation/theme/components/ThemedView";
+import ThemedTextInput from "@/presentation/theme/components/ThemedTextInput";
+import { useQuery } from "@tanstack/react-query";
+import { getProductById } from "@/core/products/actions/get-product-by-id";
+import { FullScreenLoader } from "@/presentation/shared/FullScreenLoader";
+import ProductImages from "@/presentation/products/components/ProductImages";
+import ThemedButtonGroup from "@/presentation/theme/components/ThemedButtonGroup";
+import { GenderOptions, SizesOptions } from "@/constants/SizesOptions";
+import { Gender } from "@/core/interfaces";
+import ThemedButton from "@/presentation/theme/components/ThemedButton";
 
 const ProductScreen = () => {
   const navigation = useNavigation();
 
   const primaryColor = useThemeColor({}, "primary");
+
+  const { id } = useLocalSearchParams();
+
+  const { data, isLoading, isFetching } = useQuery({
+    queryKey: ["product", id],
+    queryFn: () => getProductById(id as string),
+    enabled: !!id,
+    staleTime: 60000,
+  });
 
   useEffect(() => {
     navigation.setOptions({
@@ -26,7 +43,64 @@ const ProductScreen = () => {
     });
   }, []);
 
-  const methods = useForm({});
+  useEffect(() => {
+    if (isLoading || isFetching || !data) return;
+
+    navigation.setOptions({
+      title: data.title,
+    });
+  }, [data, isLoading, isFetching]);
+
+  const methods = useForm<{
+    title: string;
+    slug: string;
+    description: string;
+    price: string;
+    stock: string;
+    sizes: string[];
+    images: string[];
+    gender: Gender;
+  }>({
+    defaultValues: {
+      title: "",
+      slug: "",
+      description: "",
+      price: "0",
+      stock: "0",
+      sizes: [],
+      images: [],
+      gender: Gender.Unisex,
+    },
+  });
+
+  useEffect(() => {
+    if (data) {
+      methods.reset({
+        title: data.title,
+        slug: data.slug,
+        description: data.description,
+        price: data.price.toString(),
+        stock: data.stock.toString(),
+        sizes: data.sizes,
+        images: data.images,
+        gender: data.gender,
+      });
+    }
+  }, [data]);
+
+  const { handleSubmit, watch } = methods;
+
+  const [images] = watch(["images"]);
+
+  const onSubmit = handleSubmit((data) => {
+    try {
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  });
+
+  if (isLoading || isFetching) return <FullScreenLoader />;
 
   return (
     <KeyboardAvoidingView
@@ -41,6 +115,7 @@ const ProductScreen = () => {
         }}
       >
         <FormProvider {...methods}>
+          <ProductImages images={images} />
           <ThemedView style={{ marginHorizontal: 10, marginTop: 20 }}>
             <ThemedTextInput placeholder="Titulo" name="title" />
 
@@ -75,8 +150,31 @@ const ProductScreen = () => {
               name="stock"
               keyboardType="numeric"
             />
-
-            <ThemedTextInput placeholder="Tallas" name="sizes" />
+          </ThemedView>
+          <ThemedButtonGroup
+            name="sizes"
+            multiple
+            style={{
+              marginBottom: 10,
+            }}
+            options={SizesOptions}
+          />
+          <ThemedButtonGroup
+            name="gender"
+            style={{
+              marginBottom: 10,
+            }}
+            options={GenderOptions}
+          />
+          <ThemedView style={{ marginHorizontal: 10, marginBottom: 10 }}>
+            <ThemedButton
+              textStyle={{ color: "white" }}
+              onPress={onSubmit}
+              style={{ borderRadius: 8 }}
+              icon="save-outline"
+            >
+              Guardar
+            </ThemedButton>
           </ThemedView>
         </FormProvider>
       </ScrollView>

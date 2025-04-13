@@ -2,7 +2,7 @@ import { View, Text, ActivityIndicator } from "react-native";
 import React, { useEffect } from "react";
 import { useAuthStore } from "@/presentation/auth/hooks/useAuthStore";
 import { Redirect, Stack } from "expo-router";
-import { useThemeColor } from "@/presentation/auth/theme/hooks/useThemeColor";
+import { useThemeColor } from "@/presentation/theme/hooks/useThemeColor";
 import LogOutIconButton from "@/presentation/auth/components/LogOutIconButton";
 
 const CheckAuthenticationLayout = () => {
@@ -22,6 +22,7 @@ const CheckAuthenticationLayout = () => {
           justifyContent: "center",
           alignItems: "center",
           marginBottom: 5,
+          flex: 1,
         }}
       >
         <ActivityIndicator size="large" color="#0000ff" />
@@ -53,6 +54,7 @@ const CheckAuthenticationLayout = () => {
         name="product/[id]"
         options={{
           title: "Producto",
+          
         }}
       ></Stack.Screen>
     </Stack>

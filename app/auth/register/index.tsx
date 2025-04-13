@@ -7,12 +7,12 @@ import {
 } from "react-native";
 import React from "react";
 import { ScrollView } from "react-native";
-import { ThemedText } from "@/presentation/auth/theme/components/ThemedText";
-import ThemedTextInput from "@/presentation/auth/theme/components/ThemedTextInput";
+import { ThemedText } from "@/presentation/theme/components/ThemedText";
+import ThemedTextInput from "@/presentation/theme/components/ThemedTextInput";
 import { FormProvider, useForm } from "react-hook-form";
-import ThemedButton from "@/presentation/auth/theme/components/ThemedButton";
-import ThemedLink from "@/presentation/auth/theme/components/ThemedLink";
-import { useThemeColor } from "@/presentation/auth/theme/hooks/useThemeColor";
+import ThemedButton from "@/presentation/theme/components/ThemedButton";
+import ThemedLink from "@/presentation/theme/components/ThemedLink";
+import { useThemeColor } from "@/presentation/theme/hooks/useThemeColor";
 import { useAuthStore } from "@/presentation/auth/hooks/useAuthStore";
 
 interface formState {

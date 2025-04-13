@@ -2,7 +2,7 @@ import React from "react";
 import { useAuthStore } from "../hooks/useAuthStore";
 import { TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { useThemeColor } from "../theme/hooks/useThemeColor";
+import { useThemeColor } from "@/presentation/theme/hooks/useThemeColor";
 
 const LogOutIconButton = () => {
   const { logout } = useAuthStore();

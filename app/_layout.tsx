@@ -1,5 +1,5 @@
-import { useColorScheme } from "@/presentation/auth/theme/hooks/useColorScheme.web";
-import { useThemeColor } from "@/presentation/auth/theme/hooks/useThemeColor";
+import { useColorScheme } from "@/presentation/theme/hooks/useColorScheme.web";
+import { useThemeColor } from "@/presentation/theme/hooks/useThemeColor";
 import {
   DarkTheme,
   DefaultTheme,
