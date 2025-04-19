@@ -9,10 +9,10 @@ const SizesOptions = [
 ]
 
 const GenderOptions = [
-    'Unisex',
-    'Men',
-    'Women',
-    'Kids',
+    'unisex',
+    'men',
+    'women',
+    'kids',
 ]
 
 export {

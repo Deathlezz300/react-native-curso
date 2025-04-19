@@ -1,9 +1,17 @@
-import { View, Text, StyleProp, ViewStyle, useColorScheme, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleProp,
+  ViewStyle,
+  useColorScheme,
+  TouchableOpacity,
+} from "react-native";
 import React from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { ThemedView } from "./ThemedView";
 import { useThemeColor } from "../hooks/useThemeColor";
 import { ThemedText } from "./ThemedText";
+import { toTitleCase } from "@/utils/toTitleCase";
 
 interface props {
   name: string;
@@ -52,7 +60,7 @@ const ThemedButtonGroup = ({
               gap: 10,
               flexWrap: "wrap",
               paddingHorizontal: 10,
-              justifyContent:"flex-start"
+              justifyContent: "flex-start",
             },
             style,
           ]}
@@ -62,10 +70,10 @@ const ThemedButtonGroup = ({
               onPress={() => field.onChange(handleClick(value, field.value))}
               key={`${value}-${index}`}
               style={{
-                width:"auto",
-                minWidth:50,
-                maxWidth:100,
-                flex:1,
+                width: "auto",
+                minWidth: 50,
+                maxWidth: 100,
+                flex: 1,
                 borderRadius: 8,
                 backgroundColor: field.value.includes(value)
                   ? primaryColor
@@ -82,16 +90,16 @@ const ThemedButtonGroup = ({
               <ThemedText
                 style={{
                   fontWeight: "bold",
-                  color: field.value.includes(value)
+                  color: field.value.includes(value?.toLowerCase())
                     ? "white"
                     : theme === "dark"
-                    ? "white" 
+                    ? "white"
                     : "black",
                 }}
                 adjustsFontSizeToFit
                 numberOfLines={1}
               >
-                {value}
+                {toTitleCase(value)}
               </ThemedText>
             </TouchableOpacity>
           ))}

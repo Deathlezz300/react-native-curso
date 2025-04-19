@@ -4,6 +4,7 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
+  Alert,
 } from "react-native";
 import React, { useEffect, useMemo } from "react";
 import { useLocalSearchParams, useNavigation } from "expo-router";
@@ -12,19 +13,22 @@ import { useThemeColor } from "@/presentation/theme/hooks/useThemeColor";
 import { FormProvider, useForm } from "react-hook-form";
 import { ThemedView } from "@/presentation/theme/components/ThemedView";
 import ThemedTextInput from "@/presentation/theme/components/ThemedTextInput";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getProductById } from "@/core/products/actions/get-product-by-id";
 import { FullScreenLoader } from "@/presentation/shared/FullScreenLoader";
 import ProductImages from "@/presentation/products/components/ProductImages";
 import ThemedButtonGroup from "@/presentation/theme/components/ThemedButtonGroup";
 import { GenderOptions, SizesOptions } from "@/constants/SizesOptions";
-import { Gender } from "@/core/interfaces";
+import { Gender, Size } from "@/core/interfaces";
 import ThemedButton from "@/presentation/theme/components/ThemedButton";
+import { updateOrCreateProduct } from "@/core/products/actions/create-update-product-action";
 
 const ProductScreen = () => {
   const navigation = useNavigation();
 
   const primaryColor = useThemeColor({}, "primary");
+
+  const queryClient = useQueryClient();
 
   const { id } = useLocalSearchParams();
 
@@ -57,9 +61,9 @@ const ProductScreen = () => {
     description: string;
     price: string;
     stock: string;
-    sizes: string[];
+    sizes: Size[];
     images: string[];
-    gender: Gender;
+    gender: Gender[];
   }>({
     defaultValues: {
       title: "",
@@ -69,7 +73,7 @@ const ProductScreen = () => {
       stock: "0",
       sizes: [],
       images: [],
-      gender: Gender.Unisex,
+      gender: [Gender.Unisex],
     },
   });
 
@@ -83,18 +87,47 @@ const ProductScreen = () => {
         stock: data.stock.toString(),
         sizes: data.sizes,
         images: data.images,
-        gender: data.gender,
+        gender: [data.gender],
       });
     }
   }, [data]);
 
   const { handleSubmit, watch } = methods;
 
-  const [images] = watch(["images"]);
+  const [images, gender] = watch(["images", "gender"]);
 
-  const onSubmit = handleSubmit((data) => {
+  const onSubmit = handleSubmit(async (data) => {
     try {
-      console.log(data);
+      const body = {
+        ...data,
+        gender: data.gender[0] as Gender,
+        price: parseFloat(data.price),
+        stock: parseInt(data.stock),
+        id: id as string,
+      };
+
+      const response = await updateOrCreateProduct(body);
+
+      queryClient.setQueryData(["product", id], {
+        title: response.title,
+        slug: response.slug,
+        description: response.description,
+        price: response.price,
+        stock: response.stock,
+        sizes: response.sizes,
+        images: body.images,
+        user: response.user,
+        gender: response.gender,
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: ["products"],
+      });
+
+      Alert.alert(
+        id !== "new" ? "Producto actualizado" : "Producto creado",
+        ""
+      );
     } catch (error) {
       console.log(error);
     }
