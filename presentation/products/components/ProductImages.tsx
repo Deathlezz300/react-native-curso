@@ -6,6 +6,8 @@ interface props {
   images: string[];
 }
 
+const NoProductImage=require("../../../assets/images/no-product-image.png")
+
 const ProductImages = memo(({ images }: props) => {
   if (!images || images.length === 0)
     return (
@@ -16,7 +18,7 @@ const ProductImages = memo(({ images }: props) => {
         }}
       >
         <Image
-          source={require("../../../assets/images/no-product-image.png")}
+          source={NoProductImage}
           style={{
             width: 300,
             height: 300,

@@ -7,7 +7,12 @@ import {
   Alert,
 } from "react-native";
 import React, { useEffect, useMemo } from "react";
-import { useLocalSearchParams, useNavigation } from "expo-router";
+import {
+  RelativePathString,
+  router,
+  useLocalSearchParams,
+  useNavigation,
+} from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useThemeColor } from "@/presentation/theme/hooks/useThemeColor";
 import { FormProvider, useForm } from "react-hook-form";
@@ -22,6 +27,7 @@ import { GenderOptions, SizesOptions } from "@/constants/SizesOptions";
 import { Gender, Size } from "@/core/interfaces";
 import ThemedButton from "@/presentation/theme/components/ThemedButton";
 import { updateOrCreateProduct } from "@/core/products/actions/create-update-product-action";
+import MenuIconButton from "@/presentation/products/components/MenuIconButton";
 
 const ProductScreen = () => {
   const navigation = useNavigation();
@@ -42,7 +48,10 @@ const ProductScreen = () => {
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <Ionicons name="camera-outline" size={25} color={primaryColor} />
+        <MenuIconButton
+          icon="camera-outline"
+          onPress={() => router.push("/camera" as RelativePathString)}
+        />
       ),
     });
   }, []);
