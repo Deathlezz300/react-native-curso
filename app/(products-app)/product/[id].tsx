@@ -5,6 +5,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   Alert,
+  RefreshControl,
 } from "react-native";
 import React, { useEffect, useMemo } from "react";
 import {
@@ -28,6 +29,8 @@ import { Gender, Size } from "@/core/interfaces";
 import ThemedButton from "@/presentation/theme/components/ThemedButton";
 import { updateOrCreateProduct } from "@/core/products/actions/create-update-product-action";
 import MenuIconButton from "@/presentation/products/components/MenuIconButton";
+import { useCameraStore } from "@/presentation/hooks/useCameraStore";
+import { usePullToRefresh } from "@/presentation/hooks/usePullToRefesh";
 
 const ProductScreen = () => {
   const navigation = useNavigation();
@@ -38,12 +41,24 @@ const ProductScreen = () => {
 
   const { id } = useLocalSearchParams();
 
-  const { data, isLoading, isFetching } = useQuery({
+  const { selectedImage, clearImages } = useCameraStore();
+
+  useEffect(() => {
+    return () => {
+      clearImages();
+    };
+  }, []);
+
+  const { data, isLoading, isFetching, refetch } = useQuery({
     queryKey: ["product", id],
     queryFn: () => getProductById(id as string),
     enabled: !!id,
     staleTime: 60000,
   });
+
+  const { refreshing, onPullToRefresh } = usePullToRefresh(1000, () =>
+    refetch()
+  );
 
   useEffect(() => {
     navigation.setOptions({
@@ -113,9 +128,12 @@ const ProductScreen = () => {
         price: parseFloat(data.price),
         stock: parseInt(data.stock),
         id: id as string,
+        images: data.images,
       };
 
       const response = await updateOrCreateProduct(body);
+
+      clearImages();
 
       queryClient.setQueryData(["product", id], {
         title: response.title,
@@ -142,6 +160,12 @@ const ProductScreen = () => {
     }
   });
 
+  useEffect(() => {
+    if (!selectedImage || selectedImage.length === 0) return;
+
+    methods.setValue("images", [...images, ...selectedImage]);
+  }, [selectedImage]);
+
   if (isLoading || isFetching) return <FullScreenLoader />;
 
   return (
@@ -155,6 +179,9 @@ const ProductScreen = () => {
         style={{
           flex: 1,
         }}
+        refreshControl={
+          <RefreshControl onRefresh={onPullToRefresh} refreshing={refreshing} />
+        }
       >
         <FormProvider {...methods}>
           <ProductImages images={images} />
